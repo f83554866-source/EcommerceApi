@@ -1,4 +1,4 @@
-package com.ws101.yourlastname.EcommerceApi.model;
+package com.ws101.fformaran.EcommerceApi.model;
 
 import lombok.*;
 

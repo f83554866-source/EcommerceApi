@@ -1,6 +1,6 @@
-package com.ws101.yourlastname.EcommerceApi.service;
+package com.ws101.fformaran.EcommerceApi.service;
 
-import com.ws101.yourlastname.EcommerceApi.model.Product;
+import com.ws101.fformaran.EcommerceApi.model.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

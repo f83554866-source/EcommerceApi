@@ -1,4 +1,4 @@
-package com.ws101.yourlastname.EcommerceApi.controller;
+package com.ws101.fformaran.EcommerceApi.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
