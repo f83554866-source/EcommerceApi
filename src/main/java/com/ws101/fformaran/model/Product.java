@@ -1,6 +1,6 @@
-
 package com.ws101.fformaran.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // 1. ADD THIS IMPORT
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,5 +34,6 @@ public class Product {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // 2. ADD THIS ANNOTATION HERE
     private Category category;
 }

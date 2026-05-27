@@ -1,77 +1,63 @@
-# Ecommerce API
+# ShopBasic Ecommerce API
 
 ## 📌 Project Overview
-This is a simple RESTful API built using Spring Boot that manages an in-memory product catalog. It supports full CRUD operations and filtering.
+This is a RESTful API built using Spring Boot that manages an e-commerce product catalog. It supports full CRUD operations, filtering, and cross-origin resource sharing (CORS) to serve a dynamic vanilla JavaScript frontend. Data is persisted using a relational database via Spring Data JPA.
 
 ---
 
 ## 🚀 How to Run the Project
 
-1. Open terminal in project folder
-2. Run:
+1. Open terminal in the project folder
+2. Run the Spring Boot server:
+   ```bash
+   ./gradlew bootRun
+The server runs at: http://localhost:8080
 
-./gradlew bootRun
+To view the frontend, open the frontend directory in VS Code and start Live Server on port 5500.
 
+📦 Tech Stack
+Backend: Spring Boot, Java, Gradle
 
-3. Server runs at:
+Database: Spring Data JPA, Hibernate, Relational Database
 
-http://localhost:8080
+Frontend Integration: Vanilla JavaScript (Fetch API), HTML/CSS, CORS Configuration
 
+🗄️ Database Schema
+The relational database consists of the following primary tables and relationships:
 
----
+Category: Stores id and name. One Category can have many Products (One-to-Many).
 
-## 📦 Tech Stack
-- Spring Boot
-- Java
-- Gradle
-- In-memory List storage
+Product: Stores id, name, description, price, and imageUrl. It holds a foreign key (category_id) linking it to the Category table (Many-to-One).
 
----
+OrderEntity: Stores the main order record details.
 
-## 🔗 API Endpoints
+OrderItem: Maps specific products to a specific Order (Many-to-One).
 
-### GET all products
+🔗 API Endpoints
+GET all products
+GET /api/products
 
-GET /api/v1/products
+GET product by ID
+GET /api/products/{id}
 
+CREATE product
+POST /api/products
 
-### GET product by ID
+UPDATE product (PUT)
+PUT /api/products/{id}
 
-GET /api/v1/products/{id}
+PARTIAL UPDATE (PATCH)
+PATCH /api/products/{id}
 
+DELETE product
+DELETE /api/products/{id}
 
-### CREATE product
+FILTER products
+GET /api/products/filter?filterType=category&filterValue=Electronics
 
-POST /api/v1/products
+📸 Proof of Integration
+1. Database Populated with Data
+![ConsoleSucces](images/console-success.jpg)
 
-
-### UPDATE product (PUT)
-
-PUT /api/v1/products/{id}
-
-
-### PARTIAL UPDATE (PATCH)
-
-PATCH /api/v1/products/{id}
-
-
-### DELETE product
-
-DELETE /api/v1/products/{id}
-
-
-### FILTER products
-
-GET /api/v1/products/filter?filterType=category&filterValue=Category 1
-
-
----
-
-## ⚠️ Notes
-- Uses in-memory storage (List<Product>)
-- Data resets when server restarts
-
----
-
-## 📸 Testing Proof
-All endpoints tested using Thunder Client / Postman.
+2. Successful Frontend Fetch
+![frontend](images/landingpage.jpg)

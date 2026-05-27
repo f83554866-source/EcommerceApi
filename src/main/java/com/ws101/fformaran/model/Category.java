@@ -1,5 +1,6 @@
 package com.ws101.fformaran.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore; // 1. ADD THIS IMPORT
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,5 +34,6 @@ public class Category {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
+    @JsonIgnore // 2. ADD THIS ANNOTATION HERE
     private List<Product> products = new ArrayList<>();
 }
