@@ -14,7 +14,8 @@ import java.util.Map;
  * All data is persisted to the database via the ProductService and ProductRepository.
  */
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/products")
+@CrossOrigin(origins = "*")
 public class ProductController {
 
     private final ProductService service;
