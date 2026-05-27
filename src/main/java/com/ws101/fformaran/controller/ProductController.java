@@ -1,7 +1,7 @@
-package com.ws101.fformaran.EcommerceApi.controller;
+package com.ws101.fformaran.controller;
 
-import com.ws101.fformaran.EcommerceApi.model.Product;
-import com.ws101.fformaran.EcommerceApi.service.ProductService;
+import com.ws101.fformaran.model.Product;
+import com.ws101.fformaran.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
