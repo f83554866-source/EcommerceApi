@@ -2,6 +2,8 @@ package com.ws101.fformaran.services;
 
 import com.ws101.fformaran.model.Category;
 import com.ws101.fformaran.model.Product;
+import com.ws101.fformaran.repository.CategoryRepository;
+import com.ws101.fformaran.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,49 +13,82 @@ import java.util.Map;
 @Service
 public class ProductService {
 
-    private List<Product> productList = new ArrayList<>();
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService() {
-
-        Category electronics = new Category();
-        electronics.setId(1L);
-        electronics.setName("Electronics");
-
-        productList.add(new Product(
-                1L,
-                "Mouse",
-                "Gaming Mouse",
-                500.0,
-                "mouse.jpg",
-                electronics
-        ));
-
-        productList.add(new Product(
-                2L,
-                "Keyboard",
-                "Mechanical Keyboard",
-                1500.0,
-                "keyboard.jpg",
-                electronics
-        ));
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        initializeSampleData();
     }
 
+    /**
+     * Initialize sample data if the database is empty.
+     */
+    private void initializeSampleData() {
+        if (productRepository.count() == 0) {
+            Category electronics = new Category();
+            electronics.setName("Electronics");
+            electronics = categoryRepository.save(electronics);
+
+            productRepository.save(new Product(
+                    null,
+                    "Mouse",
+                    "Gaming Mouse",
+                    500.0,
+                    "mouse.jpg",
+                    electronics
+            ));
+
+            productRepository.save(new Product(
+                    null,
+                    "Keyboard",
+                    "Mechanical Keyboard",
+                    1500.0,
+                    "keyboard.jpg",
+                    electronics
+            ));
+        }
+    }
+
+    /**
+     * Retrieve all products from the database.
+     * 
+     * @return list of all products
+     */
     public List<Product> getAllProducts() {
-        return productList;
+        return productRepository.findAll();
     }
 
+    /**
+     * Retrieve a product by ID from the database.
+     * 
+     * @param id the product ID
+     * @return the product if found
+     * @throws RuntimeException if product not found
+     */
     public Product getProductById(Long id) {
-        return productList.stream()
-                .filter(product -> product.getId().equals(id))
-                .findFirst()
+        return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
+    /**
+     * Create a new product in the database.
+     * 
+     * @param product the product to create
+     * @return the saved product
+     */
     public Product createProduct(Product product) {
-        productList.add(product);
-        return product;
+        return productRepository.save(product);
     }
 
+    /**
+     * Update an existing product in the database.
+     * 
+     * @param id the product ID
+     * @param updatedProduct the updated product data
+     * @return the updated product
+     */
     public Product updateProduct(Long id, Product updatedProduct) {
 
         Product existing = getProductById(id);
@@ -64,9 +99,16 @@ public class ProductService {
         existing.setImageUrl(updatedProduct.getImageUrl());
         existing.setCategory(updatedProduct.getCategory());
 
-        return existing;
+        return productRepository.save(existing);
     }
 
+    /**
+     * Patch update a product in the database.
+     * 
+     * @param id the product ID
+     * @param updates the map of fields to update
+     * @return the updated product
+     */
     public Product patchProduct(Long id, Map<String, Object> updates) {
 
         Product product = getProductById(id);
@@ -90,27 +132,35 @@ public class ProductService {
             }
         });
 
-        return product;
+        return productRepository.save(product);
     }
 
+    /**
+     * Delete a product from the database.
+     * 
+     * @param id the product ID
+     */
     public void deleteProduct(Long id) {
 
         Product product = getProductById(id);
 
-        productList.remove(product);
+        productRepository.delete(product);
     }
 
+    /**
+     * Filter products by type and value using repository queries.
+     * 
+     * @param type the filter type (category, name, priceRange)
+     * @param value the filter value
+     * @return list of filtered products
+     */
     public List<Product> filterProducts(String type, String value) {
 
         return switch (type.toLowerCase()) {
 
-            case "category" -> productList.stream()
-                    .filter(p -> p.getCategory().getName().equalsIgnoreCase(value))
-                    .toList();
+            case "category" -> productRepository.findByCategoryName(value);
 
-            case "name" -> productList.stream()
-                    .filter(p -> p.getName().equalsIgnoreCase(value))
-                    .toList();
+            case "name" -> productRepository.findByName(value);
 
             default -> new ArrayList<>();
         };
